@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="form_card">
+<div class="card" style="width: 58rem;">
+  <div class="card-body">
+    <h5 class="card-title">USER FORM</h5>
+
+      <!--FORM BOOTSTRAP CODE-->
+<form method="post">
+  {% csrf_token %}
+<!--NAME  -->
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Name</label>
+    <input type="text" name="name" class="form-control"  placeholder="">
+  </div>
+<!--DOB  -->
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Date of Birth</label>
+    <input type="date" name="dob" class="form-control"  placeholder="">
+  </div>
+<!--AGE  -->
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Age</label>
+    <input type="text" name="age" class="form-control"  placeholder="">
+  </div>
+<!--GENDER  -->
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Gender</label>
+    <select class="form-control" id="exampleFormControlSelect1" name="gender">
+      <option>Female</option>
+      <option>Male</option>
+      <option>Others</option>
+    </select>
+  </div>
+<!--PHONE NUMBER  -->
+   <div class="form-group">
+    <label for="exampleFormControlInput1">Phone Number</label>
+    <input type="text" name="phone_number" class="form-control"  placeholder="">
+  </div>
+<!--EMAIL ADDRESS  -->
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Email address</label>
+    <input type="email"name="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+  </div>
+<!--ADDRESS  -->
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Address</label>
+    <input type="text" name="address" class="form-control"  placeholder="">
+  </div>
+<!--DISTRICT-->
+        <div class="form-group">
+            <label for="district">District</label>
+            <select class="form-control" id="district" name="district">
+                <option value="">Choose District</option>
+                {% for district in districts %}
+                <option value="{{ district.id }}" {% if district.id|stringformat:"s" == request.GET.district %}selected{% endif %}>{{ district.district }}</option>
+                {% endfor %}
+            </select>
+        </div>
+<!--BRANCH  -->
+        <div class="form-group">
+            <label for="branch">Branch</label>
+            <select class="form-control" id="branch" name="branch">
+                <option value="">Choose Branch</option>
+            </select>
+        </div>
+<!--ACCOUNT TYPE-->
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Account Type</label>
+    <select class="form-control" id="exampleFormControlSelect1" name="account_type">
+      <option>Savings Account</option>
+      <option>Current Account</option>
+      <option>NRI Account</option>
+    </select>
+  </div>
+
+
+
+
+    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+<!--    <a href="#" class="card-link btn btn-success">Submit</a>-->
+    <button type="submit" class="btn btn-success" style="width:16.5rem">Submit</button>
+    <a href="{% url 'bank_app:home' %}" class="card-link btn btn-danger">Logout</a>
+    </form>
+  </div>
+</div>
+</div>
+
+<!--JAVA SCRIPT FOR DEPENDENT DROPDOWN-->
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const districtSelect = document.getElementById('district');
+        const branchSelect = document.getElementById('branch');
+
+        districtSelect.addEventListener('change', function () {
+            const districtId = districtSelect.value;
+            fetch(`/api/branches/${districtId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    branchSelect.innerHTML = '<option value="">Choose Branch</option>';
+                    data.forEach(branch => {
+                        const option = document.createElement('option');
+                        option.value = branch.id;
+                        option.textContent = branch.name;
+                        branchSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching branches:', error);
+                });
+        });
+    });
+</script>
+
+{% endblock %}
+
+

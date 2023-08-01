@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="login_card">
+<div class="card" style="width: 19rem;">
+  <div class="card-body">
+    <center><h5 class="card-title">LOGIN</h5></center>
+
+    <!--LOGIN BOOTSTRAP FORM-->
+<form action='/welcome/' method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="exampleInputEmail1">Username</label>
+    <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your username with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+
+  <center><button type="submit" class="btn btn-success" style="width:16.5rem">Login</button></center>
+</form>
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+
+    <center><br><p class="card-text">New users click register</p>
+            <a href="{% url 'bank_app:register' %}" class="btn btn-primary">Register</a></center>
+
+  </div>
+</div>
+</div>
+
+
+{% endblock %}
